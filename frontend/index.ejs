@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart_City_Project</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+</head>
+
+<body>
+
+    <div class="container min-vh-100 d-flex flex-column justify-content-center align-items-center">
+        <h1 class="mb-5 border-bottom">İspark Otopark Arama Portalı</h1>
+        <br>
+        <br>
+        <div class="card p-3 text-center "> 
+            <h3 class="">Aradığın Otoparkı İlçe Girerek Ara</h3>
+            <form action="/parks" method="get" class="card-body ">
+                <div class="">
+                    <input type="text" name="district" class="form-control" placeholder="İlçe Giriniz">
+                </div>
+                <div class="mt-2">
+                    <button type="submit" class="btn btn-primary">Sonuçları Göster</button>
+                </div>
+            </form>
+        </div>
+        
+        <div class="mt-5 text-center">
+            <h2 class="border-bottom">Otoparkların Listesi</h2>
+            <br>
+            <h2 class="mb-5 border-bottom">
+                <%= district %> İlçesindeki Otoparklar
+            </h2>
+            <ul class="list-unstyled">
+                <% parks.forEach(park=> { %>
+                    <li>
+                        <div class="card mb-3 text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Otopark Adı: <%= park.parkName %>
+                                </h5>
+                                <p class="card-text">Kapasite: <%= park.capacity %>
+                                </p>
+
+                                <button class="btn btn-primary" onclick="redirectToDetails(<%= JSON.stringify(park) %>)">
+                                    Detayları Gör
+                                </button>
+
+
+                                <button class="btn btn-primary"
+                                    onclick="redirectToGoogleMaps(<%= park.latitude %>, <%= park.longitude %>)">
+                                    Konuma Git
+                                </button>
+                            </div>
+                        </div>
+                    </li>
+                    <% }); %>
+            </ul>
+        </div>
+
+        
+
+    </div>
+
+    <script>
+        function redirectToGoogleMaps(latitude, longitude) {
+            // Google Maps URL'i oluştur
+            var mapsUrl = "https://www.google.com/maps?q=" + latitude + "," + longitude;
+
+            // Yeni pencerede Google Maps'e yönlendir
+            window.open(mapsUrl, "_blank");
+        }
+
+
+        function redirectToDetails(park) {
+            window.location.href = `/details?park=${encodeURIComponent(JSON.stringify(park))}`;
+        }
+
+    </script>
+
+</body>
+
+</html>
+
